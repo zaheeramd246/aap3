@@ -1,0 +1,16 @@
+---
+- name: Check packages on the node
+  hosts: test
+  become: true
+  vars:
+    package: "httpd"
+
+  tasks:
+    - name: Gather the package facts
+      ansible.builtin.package_facts:
+        manager: auto
+
+    - name: check whether a {{ package }} is installed
+      ansible.builtin.debug:
+        msg: "{{ package }} {{ ansible_facts.packages[ package ][0].version }} is installed"
+      when: "package in ansible_facts.packages" 
